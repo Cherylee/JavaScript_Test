@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组去重</title>
+</head>
+<style>
+    #num {
+        display: block;
+        margin: 0 auto;
+    }
+
+    #app {
+        width: 500px;
+        margin: 0 auto;
+    }
+</style>
+<body>
+<div id="app">
+    <div class="form-group">
+        <label>需要去重的数:</label>
+        <input type="text" v-model="nummber.num"/>
+        <button v-on:click="quchong">去重</button>
+    </div>
+
+    <div class="form-group">
+        <label>去重之后:</label>
+        <input type="text" v-model="nummber.result"/>
+    </div>
+</div>
+
+<!--<p align="center">需要去重的数：</p>-->
+<!--<input value="114585321" id="num">-->
+<!--<p align="center">去重之后：</p>-->
+<!--<P align="center" id="result"></P>-->
+</body>
+<script src="js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            nummber: {
+                num: '114585321',
+                result: '0'
+            }
+        },
+        methods: {
+            quchong: function () {
+
+                var num = this.nummber.num.split("");
+
+                console.info(num);
+
+                var copy_array = [];
+                var _map = {}
+                
+                num.forEach(function (v, i) {
+                    if (!_map[v]) {
+                        _map[v] = 1
+                        copy_array.push(v);
+
+                    }
+
+                });
+                console.info(_map);
+
+                this.nummber.result = copy_array.join('');
+                console.info(this.nummber.result);
+            }
+        }
+    });
+
+
+</script>
+</html>

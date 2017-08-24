@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    ul li {
+        list-style: none;
+        display: inline-block;
+        float: left;
+    }
+
+    .swipe_contain {
+        max-width: 500px;
+        height: 285px;
+        overflow: hidden;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .btn_pre {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 50px;
+        height: 50px;
+        margin-top: -25px;
+        border:0;
+        z-index: 2;
+        background: url("img/pre.png") no-repeat ;
+        background-size: 100%;
+    }
+
+    .btn_next {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 50px;
+        height: 50px;
+        margin-top: -25px;
+        border:0;
+        z-index: 2;
+        background: url("img/next.png") no-repeat ;
+        background-size: 100%;
+    }
+
+    .tab_num {
+        position: absolute;
+        bottom: 5px;
+        right: 15px;
+        z-index: 2;
+    }
+
+    .tab_num ul li {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background: rgba(0, 0, 0, 0.4);
+        color: #ffffff;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .tab_num ul li:hover {
+        background: rgba(5, 65, 176, 0.8);;
+    }
+
+    .tab_num ul li.active {
+        background: rgba(5, 65, 176, 0.8);
+    }
+
+</style>
+<body>
+<div class="swipe_contain" id="swipe">
+    <button id="btn_pre" class="btn_pre" onclick="pre()"></button>
+    <button id="btn_next" class="btn_next" onclick="next()"></button>
+    <div id="tab_num" class="tab_num"></div>
+</div>
+
+<script>
+
+    var imgSRC = {//得到图片地址json数组
+        "img": ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg', 'img/5.jpg']
+    }
+    var imgSRC_length = imgSRC.img.length;//json数组长度
+
+
+    var swipe = document.getElementById('swipe');//获取轮播盒子
+    var distance = swipe.offsetWidth;//获取轮播宽度
+    var imgHeight = swipe.offsetHeight;//获取轮播高度
+    var tabnum = document.getElementById('tab_num');//获取数字盒子
+
+    var swipe_sub = document.createElement('div');//创建swipe_sub
+    var ul = document.createElement('ul');//创建ul
+    var num_ul = document.createElement('ul');//创建数字盒子ul
+    swipe_sub.className = 'swipe_box';
+    swipe_sub.style.width = imgSRC_length * distance + 'px';
+    swipe_sub.style.position = 'absolute';
+
+    swipe.appendChild(swipe_sub);//输出swipe_sub
+    swipe_sub.appendChild(ul);//输出ul
+    tabnum.appendChild(num_ul)//数字盒子输出ul
+
+    for (var i = 0; i < imgSRC_length; i++) {
+        var li = document.createElement('li');//创建li
+        var num_li = document.createElement('li');//创建数字盒子li
+        var img = document.createElement('img');//创建img
+        li.className = 'swipe_li';
+        img.src = imgSRC.img[i];
+        img.style.width = distance + 'px';
+        img.style.height = imgHeight + 'px';
+        num_li.innerHTML = i + 1;
+        ul.appendChild(li);//输出li
+        num_ul.appendChild(num_li)//输出数字盒子li
+        li.appendChild(img);
+        if (i == 0) {
+            num_li.className = 'active';
+        }
+    }
+
+
+    var dis_lenth = 0;//初始化移动的距离
+    var index = 0;//从0开始盒子数字
+    var listnum = num_ul.children;//获取li对象
+    Clicknum();//调用点击方法
+    setInterval(next,3000)//自动轮播
+    /******
+     * 下一页
+     * @returns {boolean}
+     */
+    function next() {
+        if (dis_lenth == (imgSRC_length - 1) * distance) {
+            dis_lenth = 0;
+            index = 0;
+        } else {
+            dis_lenth = dis_lenth + distance;
+            index = index + 1;
+        }
+        numActive(index);
+        swipe_sub.style.left = '-' + dis_lenth + 'px';
+
+    }
+    /******
+     * 上一页
+     * @returns {boolean}
+     */
+    function pre() {
+        if (dis_lenth == 0) {
+            dis_lenth = (imgSRC_length - 1) * distance;
+            index = listnum.length - 1;
+        } else {
+            dis_lenth = dis_lenth - distance;
+            index = index - 1;
+        }
+        numActive(index);
+        swipe_sub.style.left = '-' + dis_lenth + 'px';
+
+    }
+    /******
+     * 数字高亮显示
+     * @returns {boolean}
+     */
+    function numActive(index) {
+        for (var a = 0; a < listnum.length; a++) {
+            if (a == index) {
+                listnum[a].className = 'active';
+            } else {
+                listnum[a].className = '';
+            }
+
+        }
+    }
+    /******
+     * 点击数字图片切换
+     * @returns {boolean}
+     */
+    function Clicknum() {
+        for (var i = 0; i < listnum.length; i++) {
+            var objnum = listnum[i]
+            objnum.onclick = function () {
+                var numindex = this.innerHTML - 1;
+                //alert(numindex);
+                numActive(numindex);
+                var leng = distance * numindex;
+                swipe_sub.style.left = '-' + leng + 'px';
+                dis_lenth = leng;//重置移动的距离
+                index = numindex;//重置盒子数字
+            }
+        }
+
+    }
+
+
+</script>
+</body>
+</html>

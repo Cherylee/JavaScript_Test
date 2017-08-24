@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        table td {
+            padding: 20px;
+        }
+        p{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<p>第一种方法</p>
+<table id="table1">
+
+</table>
+<p>第二种方法</p>
+<table id="table2">
+
+</table>
+
+<script>
+    var table = document.getElementById('table1');
+    var hang = 5;//行
+    var col = 9;//列
+
+
+    /*****
+     * 方法1
+     */
+    var n=0;
+    for (var i = 0; i < hang; i++) {
+        var tr = document.createElement('tr');//创建tr
+        table.appendChild(tr);//输出tr
+        for (var l = 0; l < col; l++) {
+            var td = document.createElement('td');//创建td
+           if(n==0){
+               td.style.backgroundColor = 'blue';
+               n=1;
+           }else{
+               td.style.backgroundColor = 'red';
+               n=0;
+           }
+            tr.appendChild(td);//输出td
+        }
+        n=0;
+    }
+
+    /*****
+     * 方法2
+     */
+
+    var table2 = document.getElementById('table2');
+
+    for (var i = 0; i < hang; i++) {
+        var tr = document.createElement('tr');//创建tr
+        table2.appendChild(tr);//输出tr
+        for (var l = 0; l < col; l++) {
+            var td = document.createElement('td');//创建td
+            if (l%2 == 0) {
+                td.style.backgroundColor = 'blue';
+            } else {
+                td.style.backgroundColor = 'red';
+            }
+            tr.appendChild(td);//输出td
+        }
+    }
+
+</script>
+</body>
+</html>

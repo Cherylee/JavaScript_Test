@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box {
+            text-align: center;
+        }
+
+        .test_ul {
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .test_ul li {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="app">
+        <button v-on:click="zhengXu">正序</button>
+        <button v-on:click="daoXu">倒序</button>
+        <ul class="test_ul" id="bgcolor">
+            <li v-for="i in list" v-bind:style="{background:i.color}">
+                <span v-show="false">{{i.color}}</span>
+            </li>
+        </ul>
+        <p id="result">{{arrayObj}}</p>
+    </div>
+
+</body>
+<script src="https://unpkg.com/vue"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            arrayObj: [1, 1, 1, 3, 3, 3, 4],
+            colorarry: [],
+            list: [{
+                color: 'yellow'
+            }, {
+                color: 'yellow'
+            }, {
+                color: 'yellow'
+            }, {
+                color: 'green'
+            }, {
+                color: 'green'
+            }, {
+                color: 'green'
+            }, {
+                color: 'blue'
+            }],
+            newobj:[{
+                bg: '',
+                num: 0,
+            }],
+            objectList: []
+        },
+        created: function () {
+            this.list.forEach((v, i) =>  this.colorarry.push(v))
+        
+            this.twoarry(this.colorarry, this.arrayObj);//合并数组
+            console.info(this.objectList);
+        },
+        methods: {
+            zhengXu: function () {
+                this.objectList.sort((a,b) => a.num - b.num );
+                this.arrayObj.sort((a, b)=>  a - b )
+                this.addLi(_this.objectList);
+            },
+            daoXu: function () {
+                this.objectList.reverse((a,b)=> b.num=a.num)
+                this.arrayObj.reverse((a,b)=> b-a)
+                this.addLi(_this.objectList);
+            },
+            addLi: function (obj) {
+                obj.forEach( (v, i) => this.list[i].color = v.bg );
+            },
+            twoarry: function (arr_a, arr_b) {
+                this.objectList.splice(0, this.objectList.length);//清空数组
+                // let index of arr.keys()
+                for (let a  of arr_b.keys()) {
+                    this.newobj.bg = arr_a[a].color;
+                    this.newobj.num = arr_b[a];
+                    this.objectList.push(this.newobj);
+                    this.newobj = {bg: '', num: 0}
+                }
+            }
+
+        }
+    });
+
+</script>
+
+</html>

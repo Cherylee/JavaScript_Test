@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>es6正序排序</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="form-group">
+            <label>需要排序的数:</label>
+            <input type="text" v-model="thisnum.num" />
+            <button v-on:click="zhengxu">正序</button>
+        </div>
+        <div class="form-group">
+            <label>结果:</label>
+            <p>{{thisnum.result}}</p>
+        </div>
+    </div>
+</body>
+<script src="https://unpkg.com/vue "></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            thisnum: {
+                num: '321',
+                result: '0'
+            }
+        },
+        methods: {
+            zhengxu: function () {
+                let _this = this;
+                let rearry = new Array();//定义用来存放-结果-的数组
+                let arry = _this.thisnum.num.split("");//把字符串转化为数组
+                let len=arry.length;//得到数组长度
+
+                let min;//定义全局变量 最小值
+                let map1;//定义全局map 
+
+                //寻找数组最小的数字
+                var minfun = ((arry) => {
+                    map1 = {};//初始化
+                    min = arry[0];//初始化
+                    arry.forEach(function (v, i) {
+                        map1[v] = i
+                        if (v < min) {
+                            min = v
+                        }
+                    });
+                    arry.splice(map1[min], 1);
+                })
+
+                for (let x = 0; x < len; x++) {
+                    minfun(arry);
+                    // console.log(min);
+                    // console.log(arry);
+                    rearry.push(min)
+                }
+                _this.thisnum.result=rearry.join('');
+                // console.log(rearry);
+
+            }
+        }
+    })
+
+</script>
+
+</html>
