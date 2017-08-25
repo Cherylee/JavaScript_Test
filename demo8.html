@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+
+    .left,
+    .right {
+        width: 40%;
+        border: 1px solid #dddddd;
+    }
+
+    .left>p,
+    .right>p {
+        padding: 10px 20px;
+        position: relative;
+    }
+
+    p>span {
+        display: block;
+        background: red;
+        color: #ffffff;
+        position: absolute;
+        /* width: 15px; */
+        height: 43px;
+        vertical-align: middle;
+        width: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    .middle {
+        width: 15%;
+        text-align: center
+    }
+
+    .middle>button {
+        margin: 20px 0;
+        padding: 10px
+    }
+
+    .box>div {
+        display: inline-block
+    }
+</style>
+
+<body>
+    <div class="box">
+        <div class="left"></div>
+        <div class="middle">
+            <button id="youyi">右移</button><br>
+            <button id="allyouyi">全部右移</button><br>
+            <button id="zuoyi">左移</button><br>
+            <button id="allzuoyi">全部左移</button><br>
+        </div>
+        <div class="right"></div>
+    </div>
+    <script src="http://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script>
+        //根据下面这个数据，实现选项交互功能
+        var json = [
+            { name: '深圳', value: 'sz' },
+            { name: '上海', value: 'sh' },
+            { name: '北京', value: 'bj' },
+            { name: '重庆', value: 'cq' },
+            { name: '长沙', value: 'cs' },
+            { name: '西安', value: 'xa' },
+            { name: '广州', value: 'gz' },
+            { name: '天津', value: 'tj' },
+            { name: '济南', value: 'jn' },
+            { name: '南昌', value: 'nc' },
+        ];
+        //封装一个对象
+        var obj = function () {
+            this.eqnum = 0;
+            this.left = $('.left');//左边容器对象
+            this.right = $('.right');//右边容器对象
+
+            this.btnLeft = $('#zuoyi');//左移按钮
+            this.btnAllLeft = $('#allzuoyi');//全部左移按钮
+            this.btnRight = $('#youyi');//右移按钮
+            this.btnAllRight = $('#allyouyi');//全部右移按钮
+            this.p = '';//移动对象
+            this.clear = function () {
+                $('span').remove();
+            }
+        }
+
+
+        $(function () {
+            var odo=new obj();
+            console.log(odo.left)
+            //把json数据取出来，默认显示在面板上
+            $.each(json, function (i, item) {
+                odo.left.append('<p>' + item.value + item.name + '</p>')
+            });
+            /*点击文字高亮*/
+            $('.left>p,.right>p').click(function () {
+                $(this).append('<span></span>')
+            })
+
+            /*绑定右移函数*/
+            odo.btnRight.click(function () {
+                var len = odo.left.children('p').has('span').length;
+                if (len > 0) {
+                    odo.p = odo.left.children('p').has('span');
+                } else {
+                    odo.p = odo.left.children('p').eq(odo.eqnum);
+                }
+                odo.right.append(odo.p);
+                clear();
+            })
+            /*绑定全部右移函数*/
+            odo.btnAllRight.click(function () {
+                odo.p = odo.left.html();
+                odo.left.html('')
+                odo.right.append(odo.p);
+                odo.clear();
+            });
+            /*绑定左移函数*/
+            odo.btnLeft.click(function () {
+                var len = odo.right.children('p').has('span').length;
+                if (len > 0) {
+                    odo.p = odo.right.children('p').has('span');
+                } else {
+                    odo.p = odo.right.children().eq(odo.eqnum);
+                }
+                odo.left.prepend(odo.p);
+                odo.clear();
+            })
+            /*绑定全部左移函数*/
+            odo.btnAllLeft.click(function () {
+                odo.p = odo.right.html();
+                odo.right.html('');
+                odo.left.append(odo.p);
+                odo.clear();
+            })
+
+
+
+        })
+    </script>
+</body>
+
+</html>
